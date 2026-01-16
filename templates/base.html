@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Foodie Haven{% endblock %}</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- Primary Theme Colors --- */
+        :root {
+            --color-primary: #A30000; /* Deep Red/Burgundy */
+            --color-primary-hover: #850000;
+            --color-accent: #FFD700; /* Gold (can be used for subtle highlight) */
+            --bg-page: #F9F7F5; /* Off-White Background */
+            --bg-card: #FFFFFF;
+            --nav-link-color: #4b5563; /* Gray-700 */
+        }
+        
+        /* --- Base Body and Layout --- */
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-page);
+            color: #1f2937; /* Dark text */
+            margin: 0; 
+            padding: 0;
+            display: flex; /* For min-h-screen layout */
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+             flex-grow: 1; /* Ensures content takes up available space */
+        }
+
+        /* --- Header/Navigation Bar Styling --- */
+        .header-bg {
+            background-color: var(--bg-card);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08); /* Subtle shadow for depth */
+        }
+        
+        /* Apply dynamic hover effect to nav links */
+        .nav-link {
+            transition: all 0.2s ease-in-out;
+            position: relative;
+            font-weight: 700 !important; /* Enforce boldness */
+        }
+        .nav-link:hover {
+            color: var(--color-primary) !important; /* Override Tailwind color on hover */
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            background-color: var(--color-primary);
+            bottom: 0px; /* Position at the bottom of the padding/link area */
+            left: 50%;
+            transform: translateX(-50%);
+            transition: width 0.3s ease-in-out;
+            border-radius: 9999px; /* Rounded pill shape for underline */
+        }
+        .nav-link:hover::after {
+            width: 80%; /* Grow underline on hover */
+        }
+        
+        /* --- Primary Button Styling --- */
+        .primary-btn {
+            background-color: var(--color-primary);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 4px 10px rgba(163, 0, 0, 0.4); /* Stronger shadow */
+            font-weight: 600;
+        }
+        .primary-btn:hover {
+            background-color: var(--color-primary-hover);
+            transform: translateY(-2px); /* Slight lift */
+            box-shadow: 0 10px 20px rgba(163, 0, 0, 0.6);
+        }
+        
+        /* --- Form Container (Login/Register/Add Menu) --- */
+        .form-container {
+            max-width: 450px;
+            margin: 40px auto;
+            padding: 3rem;
+            background-color: var(--bg-card);
+            border-radius: 16px; /* Slightly larger radius */
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15); /* More prominent, soft shadow */
+            border-top: 6px solid var(--color-primary); /* Bold top accent */
+        }
+        
+        /* --- Table Styling (Admin/Orders/Cart) --- */
+        .table-admin th {
+            background-color: var(--color-primary);
+            color: white;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+        /* Zebra striping is slightly enhanced */
+        .table-admin tr:nth-child(even) {
+            background-color: #fefefe;
+        }
+        .table-admin tr:nth-child(odd) {
+            background-color: var(--bg-page);
+        }
+        .table-admin tr:hover {
+            background-color: #fddddd !important; /* Light red hover for tables */
+        }
+
+        /* --- Menu Item Card Enhancement (from menu.html) --- */
+        .product-card {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border-radius: 1.5rem; /* Matches card rounding */
+            overflow: hidden;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); 
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px) scale(1.02); /* Lift and scale */
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+        }
+        
+        /* --- Homepage Hero Styling --- */
+        .home {
+            min-height: calc(100vh - 80px); /* Adjust height for nav */
+            background-image: url('https://placehold.co/1920x800/222222/FFFFFF?text=Delicious+Food+Background');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* Parallax effect key */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            text-align: center;
+        }
+        .home .overlay {
+            background-color: rgba(0, 0, 0, 0.5); /* Slightly darker overlay */
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 20px;
+        }
+        .home h2 {
+            font-size: 4rem; /* Larger title */
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            line-height: 1;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+        .home p {
+            font-size: 1.8rem;
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+        }
+        
+    </style>
+    </head>
+<body class="min-h-screen">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div id="flash-messages" class="fixed top-0 left-1/2 -translate-x-1/2 mt-4 z-50 w-full max-w-sm space-y-2">
+                {% for category, message in messages %}
+                    <div class="message-item p-4 text-sm rounded-lg shadow-lg flex items-center justify-between 
+                        {% if category == 'success' %} bg-green-100 text-green-800 border border-green-300
+                        {% elif category == 'danger' %} bg-red-100 text-red-800 border border-red-300
+                        {% elif category == 'warning' %} bg-yellow-100 text-yellow-800 border border-yellow-300
+                        {% elif category == 'info' %} bg-blue-100 text-blue-800 border border-blue-300
+                        {% else %} bg-blue-100 text-blue-800 border border-blue-300 {% endif %}
+                        " role="alert">
+                        <span class="mr-4">{{ message }}</span>
+                        <button type="button" class="close-btn p-1 -mr-1 -my-1 rounded-full hover:bg-opacity-70 transition opacity-80" aria-label="Close">
+                            <i data-lucide="x" class="w-4 h-4 
+                            {% if category == 'success' %} text-green-800
+                            {% elif category == 'danger' %} text-red-800
+                            {% elif category == 'warning' %} text-yellow-800
+                            {% elif category == 'info' %} text-blue-800
+                            {% else %} text-blue-800 {% endif %}
+                            "></i>
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <nav class="header-bg shadow-lg sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center">
+                    <i data-lucide="heart" class="w-6 h-6 text-red-800 mr-2"></i>
+                    <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight">Foodie Haven</h1>
+                </div>
+
+                <div class="hidden sm:flex space-x-2">
+                    <a href="{{ url_for('home') }}" class="nav-link text-gray-700 font-bold px-4 py-2 rounded-lg text-lg">Home</a>
+                    {% if not session.is_admin %}
+                    <a href="{{ url_for('food')}}" class="nav-link text-red-800 font-bold px-4 py-2 rounded-lg text-lg">Menu</a>
+                    <a href="{{ url_for('orders') }}" class="nav-link text-red-800 font-bold px-4 py-2 rounded-lg text-lg">My Orders</a>
+                    <a href="{{ url_for('cart_view') }}" class="nav-link text-red-800 font-bold px-4 py-2 rounded-lg text-lg ">🛒Cart Items</a>
+                    <a href="{{ url_for('about') }}" class="nav-link text-red-800 font-bold px-4 py-2 rounded-lg text-lg ">About us</a>
+                    {% endif %}
+
+                    {% if session.is_admin %}
+                    <a href="{{ url_for('Add_menu') }}" class="nav-link text-red-800 font-bold px-3 py-2 rounded-lg text-lg">Add Menu</a>
+                    <a href="{{ url_for('admin_dashboard') }}" class="nav-link text-red-800 font-bold px-3 py-2 rounded-lg text-lg">Dashboard</a>
+                    <a href="{{ url_for('profit_loss') }}" class="nav-link text-red-800 font-bold px-3 py-2 rounded-lg text-lg">P&L Report</a>
+                    {% endif %}
+
+                    {% if 'username' not in session %}
+                        <a href="{{ url_for('login') }}" class="nav-link text-gray-800 font-bold px-3 py-2 rounded-lg text-lg">
+                            <i data-lucide="log-in" class="inline-block w-5 h-5 mr-1"></i>Login</a>
+                        
+                    {% endif %}
+                </div>
+
+                <div class="flex items-center space-x-3">
+                    {% if 'username' in session %}
+                        <span class="text-sm font-medium p-2 hidden sm:inline-block rounded-full bg-gray-100 text-gray-700">
+                            <i data-lucide="user" class="inline-block w-4 h-4 mr-1 text-red-800"></i>
+                            Hello, {{ session.username }}
+                        </span>
+                        <a href="{{ url_for('logout') }}" class="primary-btn text-white text-sm font-semibold px-4 py-2 rounded-full flex items-center">
+                            <i data-lucide="log-out" class="w-4 h-4 mr-1"></i>
+                            Logout
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="primary-btn text-white text-sm font-semibold px-4 py-2 rounded-full flex items-center">
+                            <i data-lucide="log-in" class="w-4 h-4 mr-1"></i>
+                            Login
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+    <main class="min-h-[calc(100vh-140px)]">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-gray-800 text-white p-6 mt-10">
+        <div class="max-w-7xl mx-auto text-center text-sm">
+            <p class="mb-1">© Foodie Haven | Crafted with Culinary Delight</p>
+            <div class="flex justify-center space-x-4 mt-2 text-gray-400">
+                <a href="#" class="hover:text-red-300">Privacy Policy</a>
+                <a href="#" class="hover:text-red-300">Terms of Service</a>
+                <a href="#" class="hover:text-red-300">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // --- Hero Content Entry Animation ---
+        const animateInHero = () => {
+            // Check if we are on the homepage (where the IDs exist)
+            const title = document.getElementById('hero-title');
+            const subtitle = document.getElementById('hero-subtitle');
+            const buttons = document.getElementById('hero-buttons');
+
+            if (title && subtitle && buttons) {
+                // Remove the starting classes (opacity-0 and translate-y-8) to trigger the transition
+                title.classList.remove('opacity-0', 'translate-y-8');
+                subtitle.classList.remove('opacity-0', 'translate-y-8', 'delay-200');
+                buttons.classList.remove('opacity-0', 'translate-y-8', 'delay-500');
+            }
+        };
+
+        // Run the animation logic after DOM content is fully loaded
+        document.addEventListener('DOMContentLoaded', animateInHero);
+
+        // --- Flash Message Dismissal Logic ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const flashContainer = document.getElementById('flash-messages');
+            if (flashContainer) {
+                // Select all individual message items
+                const messageItems = flashContainer.querySelectorAll('.message-item');
+
+                messageItems.forEach(item => {
+                    // 1. Auto-dismiss after 1.5 seconds (1500ms) - Adjusted for better UX
+                    setTimeout(() => {
+                        // Apply fade-out transition classes
+                        item.classList.add('transition-opacity', 'duration-500', 'opacity-0'); 
+                        
+                        // Remove element completely after the transition finishes (0.5s)
+                        setTimeout(() => {
+                            item.remove();
+                        }, 500); 
+
+                    }, 4000); // Wait 4 seconds before starting fade-out
+
+                    // 2. Handle manual close button click
+                    const closeButton = item.querySelector('.close-btn');
+                    if (closeButton) {
+                        closeButton.addEventListener('click', () => {
+                            item.classList.add('transition-opacity', 'duration-300', 'opacity-500');
+                            setTimeout(() => {
+                                item.remove();
+                            }, 300);
+                        });
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

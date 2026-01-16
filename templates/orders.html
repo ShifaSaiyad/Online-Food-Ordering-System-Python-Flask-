@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-6xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+    <h2 class="text-4xl font-bold mb-8 text-gray-900 text-center">Your Order History</h2>
+    
+    {% if orders %}
+    <div class="bg-white shadow-xl rounded-xl overflow-hidden border border-gray-100">
+        <table class="min-w-full border-collapse table-auto table-admin">
+            <thead>
+                <tr>
+                    <th class="py-4 px-6 text-left">Food Item</th>
+                    <th class="py-4 px-6 text-left">Quantity</th>
+                    <th class="py-4 px-6 text-left">Unit Price (₹)</th>
+                    <th class="py-4 px-6 text-left">Total (₹)</th>
+                    <th class="py-4 px-6 text-left">Date Placed</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-700">
+                {% for order in orders %}
+                <tr class="border-b border-gray-200 hover:bg-red-50/50 transition duration-150">
+                    <td class="py-3 px-6 font-semibold">{{ order.food_name }}</td>
+                    <td class="py-3 px-6">{{ order.quantity }}</td>
+                    <td class="py-3 px-6">₹{{ order.price | round(2) }}</td>
+                    <td class="py-3 px-6 font-bold text-red-800">₹{{ order.total | round(2) }}</td>
+                    <td class="py-3 px-6 text-sm text-gray-500">{{ order.date_created.strftime('%Y-%m-%d %I:%M %p') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="text-center p-12 bg-white rounded-xl shadow-lg border border-gray-100">
+        <i data-lucide="package" class="w-12 h-12 text-gray-400 mx-auto mb-4"></i>
+        <p class="text-xl text-gray-600">You haven't placed any orders yet!</p>
+        <a href="{{ url_for('food') }}" class="mt-6 primary-btn inline-block text-white px-6 py-3 rounded-full font-semibold">
+            Start Ordering Now
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

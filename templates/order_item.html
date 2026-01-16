@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-lg mx-auto mt-12 bg-white p-8 rounded-xl shadow-2xl border border-gray-100">
+    <h2 class="text-3xl font-bold mb-6 text-center text-gray-800">Complete Your Order</h2>
+    
+    <!-- Display the image placeholder/actual image here for better UX -->
+    <div class="mb-6 text-center">
+        <img src="{{ url_for('uploaded_file', filename=food.image) if food.image else 'https://placehold.co/400x300/a30000/ffffff?text=' + food.name|replace(' ', '+') }}" alt="{{ food.name }}" 
+     class="w-full h-48 object-cover object-center" 
+     onerror="this.onerror=null;this.src='https://placehold.co/400x300/a30000/ffffff?text=Image+Missing'">
+    </div>
+
+    <form method="POST" class="space-y-5">
+        <div class="flex flex-col sm:flex-row sm:space-x-4">
+            <div class="mb-4 sm:w-1/2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Item Name</label>
+                <input type="text" name="food_name" value="{{ food.name }}" readonly
+                    class="w-full p-3 border border-gray-200 rounded-lg bg-gray-50 font-semibold text-gray-800">
+            </div>
+
+            <div class="mb-4 sm:w-1/2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Price (₹)</label>
+                <input type="text" id="price" value="{{ food.price }}" readonly
+                    class="w-full p-3 border border-gray-200 rounded-lg bg-gray-50 font-semibold text-red-800">
+            </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:space-x-4">
+            <div class="mb-4 sm:w-1/2">
+                <label for="quantity" class="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
+                <select name="quantity" id="quantity" 
+                    class="w-full p-3 border border-gray-300 rounded-lg bg-white focus:ring-red-500 focus:border-red-500 transition duration-150 appearance-none">
+                    {% for i in range(1,10) %}
+                    <option value="{{ i }}">{{ i }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="mb-4 sm:w-1/2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Total Price (₹)</label>
+                <input type="text" id="total" readonly 
+                    class="w-full p-3 border border-gray-200 rounded-lg bg-gray-50 font-bold text-2xl text-red-800">
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Delivery Location</label>
+            <input type="text" name="location" required placeholder="Street address, city, and zip code"
+                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500 transition duration-150">
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
+            <input type="text" name="mobile" required placeholder="e.g., 9876543210"
+                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500 transition duration-150">
+        </div>
+
+        <button type="submit" class="primary-btn w-full text-white py-3 rounded-lg text-lg font-semibold">
+            <i data-lucide="check-circle" class="w-5 h-5 inline-block mr-2"></i> Confirm Order and download recipt
+        </button>
+    </form>
+</div>
+
+<script>
+    const priceInput = document.getElementById('price');
+    const qtySelect = document.getElementById('quantity');
+    const totalInput = document.getElementById('total');
+    
+    // Ensure price is a float, handling potential parsing issues
+    const price = parseFloat(priceInput.value);
+
+    function updateTotal() {
+        const qty = parseInt(qtySelect.value);
+        // Check for valid numbers before calculation
+        if (!isNaN(price) && !isNaN(qty) && qty >= 1) {
+            totalInput.value = (qty * price).toFixed(2);
+        } else {
+            totalInput.value = '0.00';
+        }
+    }
+
+    qtySelect.addEventListener('change', updateTotal);
+    
+    // Set initial total on page load
+    updateTotal();
+</script>
+{% endblock %}

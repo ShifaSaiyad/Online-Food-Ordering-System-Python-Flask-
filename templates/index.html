@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="home" style="background-image: url('static/images/background_image4.jpeg'); background-size: cover; background-position: center;">
+  <div class="overlay">
+    <h2 id="hero-title" class="text-5xl md:text-6xl font-extrabold tracking-tighter mb-4 max-w-4xl leading-tight opacity-0 translate-y-8 transition-all duration-1000 ease-out">Best  food  for  your  taste</h2>
+    <p id="hero-subtitle" class="text-xl md:text-2xl font-light mb-8 max-w-2xl opacity-0 translate-y-8 transition-all duration-1000 ease-out delay-200">Discover delectable cuisine and unforgettable moments in our welcoming, culinary haven.</p>
+    
+    <div id="hero-buttons" class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 opacity-0 translate-y-8 transition-all duration-1000 ease-out delay-500">
+      <a href="{{ url_for('about')}}" class="primary-btn text-white font-semibold px-8 py-3 rounded-full text-lg shadow-xl hover:shadow-2xl">
+         Know More
+      </a>
+      <a href="{{ url_for('login')}}" class="text-white border-2 border-white bg-transparent hover:bg-white hover:text-red-800 font-semibold px-8 py-3 rounded-full text-lg transition duration-300">
+        Get Started
+      </a>
+    </div>
+  </div>
+</section>
+{% endblock %}

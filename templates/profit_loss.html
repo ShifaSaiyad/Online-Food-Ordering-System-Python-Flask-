@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="p-4 sm:p-6 lg:p-8 bg-gray-50 min-h-screen">
+<div class="mb-6 flex justify-between items-center">
+    <h1 class="text-3xl font-extrabold text-gray-800">Profit & Loss Report</h1>
+    <div class="inline-flex rounded-xl shadow-sm bg-white p-1" role="group">
+        {% set base_url = url_for('profit_loss') %}
+        <a href="{{ base_url }}?time_frame=daily" class="px-4 py-2 text-sm font-medium rounded-lg 
+            {% if time_frame == 'daily' %}bg-red-500 text-white shadow-md{% else %}text-gray-900 hover:bg-red-50{% endif %}">
+            Daily
+        </a>
+        <a href="{{ base_url }}?time_frame=weekly" class="px-4 py-2 text-sm font-medium rounded-lg 
+            {% if time_frame == 'weekly' %}bg-red-500 text-white shadow-md{% else %}text-gray-900 hover:bg-red-50{% endif %}">
+            Weekly
+        </a>
+        <a href="{{ base_url }}?time_frame=monthly" class="px-4 py-2 text-sm font-medium rounded-lg 
+            {% if time_frame == 'monthly' %}bg-red-500 text-white shadow-md{% else %}text-gray-900 hover:bg-red-50{% endif %}">
+            Monthly
+        </a>
+    </div>
+</div>
+
+<div class="bg-red-50 p-4 rounded-xl mb-6 border border-red-200">
+    <p class="text-sm font-medium text-red-700">
+        <i data-lucide="calendar" class="w-4 h-4 inline-block mr-1"></i>
+        Data is currently filtered for: 
+        <span class="font-bold uppercase">{{ time_frame }}</span> 
+        (Range: 
+        <span class="font-bold">{{ start_date | default('') }}</span> to <span class="font-bold">{{ end_date | default('') }}</span>)
+    </p>
+</div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white p-6 rounded-2xl shadow-lg border-t-4 border-blue-500">
+            <div class="flex items-center">
+                <i data-lucide="dollar-sign" class="w-8 h-8 text-blue-500 mr-4 p-1.5 bg-blue-50 rounded-full"></i>
+                <div>
+                    <p class="text-sm font-medium text-gray-500 uppercase">Total Revenue</p>
+                    <p class="text-3xl font-extrabold text-gray-900">₹{{ "%.2f"|format(total_selling) }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl shadow-lg border-t-4 border-yellow-500">
+            <div class="flex items-center">
+                <i data-lucide="credit-card" class="w-8 h-8 text-yellow-500 mr-4 p-1.5 bg-yellow-50 rounded-full"></i>
+                <div>
+                    <p class="text-sm font-medium text-gray-500 uppercase">Total Cost</p>
+                    <p class="text-3xl font-extrabold text-gray-900">₹{{ "%.2f"|format(total_cost) }}</p>
+                </div>
+            </div>
+        </div>
+
+        {% set profit_color = 'text-green-600 border-green-500' if total_profit >= 0 else 'text-red-600 border-red-500' %}
+        <div class="bg-white p-6 rounded-2xl shadow-lg border-t-4 {{ profit_color }}">
+            <div class="flex items-center">
+                <i data-lucide="trending-up" class="w-8 h-8 {{ profit_color }} mr-4 p-1.5 bg-{{ 'green' if total_profit >= 0 else 'red' }}-50 rounded-full"></i>
+                <div>
+                    <p class="text-sm font-medium text-gray-500 uppercase">Grand Profit / (Loss)</p>
+                    <p class="text-3xl font-extrabold {{ profit_color }}">₹{{ "%.2f"|format(total_profit) }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="bg-white p-6 rounded-2xl shadow-2xl mb-10 ring-1 ring-gray-100">
+        <h1 class="text-3xl font-extrabold text-gray-800 mb-6 flex items-center">
+            <i data-lucide="list-tree" class="w-7 h-7 mr-3 text-red-600"></i>
+            Detailed P&L Report by Item
+        </h1>
+
+        <div class="overflow-x-auto rounded-xl border border-gray-100">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-red-50">
+                    <tr>
+                        <th scope="col" class="py-3.5 px-4 text-left text-xs font-semibold text-red-700 uppercase tracking-wider">Item Name</th>
+                        <th scope="col" class="py-3.5 px-4 text-right text-xs font-semibold text-red-700 uppercase tracking-wider">Cost (Abandoned)</th>
+                        <th scope="col" class="py-3.5 px-4 text-right text-xs font-semibold text-red-700 uppercase tracking-wider">Selling Price</th>
+                        <th scope="col" class="py-3.5 px-4 text-right text-xs font-semibold text-red-700 uppercase tracking-wider">Qty Sold</th>
+                        <th scope="col" class="py-3.5 px-4 text-right text-xs font-semibold text-red-700 uppercase tracking-wider">Total Cost</th>
+                        <th scope="col" class="py-3.5 px-4 text-right text-xs font-semibold text-red-700 uppercase tracking-wider">Total Selling</th>
+                        <th scope="col" class="py-3.5 px-4 text-right text-xs font-semibold text-red-700 uppercase tracking-wider">Profit / (Loss)</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100 bg-white">
+                    {% for r in rows %}
+                    <tr class="hover:bg-red-50/50 transition duration-150 ease-in-out">
+                        <td class="py-3 px-4 text-left font-semibold text-gray-800">{{ r.item_name }}</td>
+                        <td class="py-3 px-4 text-right text-gray-600">₹{{ "%.2f"|format(r.abandoned_cost or 0) }}</td>
+                        <td class="py-3 px-4 text-right text-gray-600">₹{{ "%.2f"|format(r.selling_price or 0) }}</td>
+                        <td class="py-3 px-4 text-right text-gray-600">{{ r.total_quantity }}</td>
+                        <td class="py-3 px-4 text-right text-gray-600">₹{{ "%.2f"|format(r.total_cost or 0) }}</td>
+                        <td class="py-3 px-4 text-right text-gray-600 font-medium">₹{{ "%.2f"|format(r.total_selling or 0) }}</td>
+                        <td class="py-3 px-4 text-right font-extrabold text-lg {{ 'text-green-600' if r.profit_loss >= 0 else 'text-red-600' }}">
+                            ₹{{ "%.2f"|format(r.profit_loss or 0) }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                    <tr class="bg-gray-100 hover:bg-gray-200 font-bold border-t-2 border-gray-300">
+                        <td class="py-4 px-4 text-left text-gray-900 uppercase text-lg"> GRAND TOTAL</td>
+                        <td class="py-4 px-4 text-right text-gray-500">-</td>
+                        <td class="py-4 px-4 text-right text-gray-500">-</td>
+                        <td class="py-4 px-4 text-right text-gray-500">-</td>
+                        <td class="py-4 px-4 text-right text-gray-900 text-lg">
+                            ₹{{ "%.2f"|format(total_cost) }}
+                        </td>
+                        <td class="py-4 px-4 text-right text-gray-900 text-lg">
+                            ₹{{ "%.2f"|format(total_selling) }}
+                        </td>
+                        <td class="py-4 px-4 text-right font-extrabold text-xl 
+                            {{ 'text-green-600' if total_profit >= 0 else 'text-red-600' }}">
+                            ₹{{ "%.2f"|format(total_profit) }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <hr class="my-10 border-gray-200">
+
+    <div class="bg-white p-6 rounded-2xl shadow-2xl ring-1 ring-gray-100">
+        <h2 class="text-3xl font-extrabold text-gray-800 mb-6 flex items-center">
+            <i data-lucide="line-chart" class="w-7 h-7 mr-3 text-red-600"></i>
+            Monthly Revenue Reports
+        </h2>
+
+        <div class="overflow-x-auto rounded-xl border border-gray-100">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-red-50">
+                    <tr>
+                        <th scope="col" class="py-3.5 px-4 text-left text-xs font-semibold text-red-700 uppercase tracking-wider">Month</th>
+                        <th scope="col" class="py-3.5 px-4 text-left text-xs font-semibold text-red-700 uppercase tracking-wider">Total Revenue</th>
+                        <th scope="col" class="py-3.5 px-4 text-left text-xs font-semibold text-red-700 uppercase tracking-wider">Estimated Profit/Loss</th>
+                        <th scope="col" class="py-3.5 px-4 text-left text-xs font-semibold text-red-700 uppercase tracking-wider">Last Updated</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100 bg-white">
+    {% for report in monthly_reports %}
+    <tr class="hover:bg-red-50/50 transition duration-150 ease-in-out">
+        <td class="py-3 px-4 font-semibold text-gray-800">{{ report.month_year }}</td>
+        <td class="py-3 px-4 text-gray-900 font-extrabold text-lg">₹{{ "%.2f"|format(report.total_revenue) }}</td>
+        <td class="py-3 px-4 {% if report.total_profit is not none and report.total_profit >= 0 %}text-green-600{% elif report.total_profit is not none %}text-red-600{% else %}text-gray-500{% endif %} font-extrabold text-lg">
+            {% if report.total_profit is not none %}
+                ₹{{ "%.2f"|format(report.total_profit) }}
+            {% else %}
+                N/A
+            {% endif %}
+            <span class="text-xs font-normal text-gray-500 block">
+                ({{ "Est. P/L" if report.total_profit is none else "Actual P/L" }})
+            </span>
+        </td>
+        <td class="py-3 px-4 text-gray-500 text-sm">{{ report.date_recorded.strftime('%Y-%m-%d') }}</td>
+    </tr>
+    {% else %}
+    {% endfor %}
+</tbody>
+            </table>
+        </div>
+       <p class="mt-5 text-sm text-gray-600 bg-gray-50 p-3 rounded-lg border-l-4 border-gray-400">
+    <span class="font-bold">Note:</span> Monthly **Revenue** and **Actual P/L** are automatically calculated and stored when the report is viewed for the corresponding month. **Estimated P/L** is shown as 'N/A' until the month's report is generated.
+</p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,263 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Foodie Haven</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        /* --- INTERNAL CSS START --- */
+        
+        /* Base Settings just for this page area */
+        .about-page-wrapper {
+            font-family: 'Poppins', sans-serif;
+            background-color: #fff;
+            color: #333;
+            overflow-x: hidden; /* Prevents horizontal scroll */
+            padding-bottom: 50px;
+        }
+
+        .about-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* 1. Header Section */
+        .about-header {
+            text-align: center;
+            padding: 60px 0 40px;
+        }
+
+        .about-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            color: #222;
+            margin-bottom: 10px;
+        }
+
+        .about-header span {
+            color: #ce1212; /* Foodie Haven Red */
+        }
+
+        .divider {
+            height: 4px;
+            width: 80px;
+            background-color: #ce1212;
+            margin: 0 auto 20px;
+            border-radius: 2px;
+        }
+
+        .about-header p {
+            color: #666;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* 2. Main Content Grid */
+        .about-grid {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            margin-top: 40px;
+            flex-wrap: wrap; /* Makes it responsive */
+        }
+
+        /* Left Side: Text */
+        .about-text-content {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .about-text-content h3 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #222;
+        }
+
+        .about-text-content p {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        .highlight-box {
+            border-left: 4px solid #ce1212;
+            padding-left: 20px;
+            background: #fff0f0;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+            color: #444;
+        }
+
+        /* Right Side: Image Composition */
+        .about-image-group {
+            flex: 1;
+            position: relative;
+            min-width: 300px;
+            height: 450px; /* Fixed height for the collage */
+        }
+
+        .img-back {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 70%;
+            height: 80%;
+            object-fit: cover;
+            border-radius: 15px;
+            z-index: 1;
+            box-shadow: 10px 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .img-front {
+            position: absolute;
+            bottom: 0;
+            left: 10px;
+            width: 55%;
+            height: 60%;
+            object-fit: cover;
+            border-radius: 15px;
+            z-index: 2;
+            border: 8px solid #fff; /* White border to separate images */
+            box-shadow: 0px 10px 30px rgba(0,0,0,0.2);
+        }
+
+        /* 3. Values Section (Cards) */
+        .values-section {
+            margin-top: 100px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .value-card {
+            background: #ffffff;
+            padding: 40px 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #eee;
+        }
+
+        .value-card:hover {
+            transform: translateY(-10px); /* Moves up on hover */
+            box-shadow: 0 15px 30px rgba(206, 18, 18, 0.15);
+            border-color: #ce1212;
+        }
+
+        .icon-wrapper {
+            width: 70px;
+            height: 70px;
+            background: #fff0f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: #ce1212;
+            font-size: 28px;
+        }
+
+        .value-card h4 {
+            font-size: 1.25rem;
+            margin-bottom: 10px;
+            color: #222;
+        }
+
+        .value-card p {
+            font-size: 0.9rem;
+            color: #777;
+            line-height: 1.6;
+        }
+
+        /* Button */
+        .cta-button {
+            display: inline-block;
+            margin-top: 20px;
+            background-color: #ce1212;
+            color: white;
+            padding: 12px 35px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(206, 18, 18, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background-color: #b00f0f;
+            transform: scale(1.05);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .about-header h1 { font-size: 2.5rem; }
+            .about-image-group { height: 350px; margin-bottom: 30px; }
+            .about-grid { flex-direction: column-reverse; gap: 30px; }
+            .img-front { left: 0; width: 60%; }
+        }
+
+        /* --- INTERNAL CSS END --- */
+    </style>
+</head>
+<body>
+
+    <div class="about-page-wrapper">
+        <div class="about-container">
+            
+            <div class="about-header">
+                <h1>About <span>Foodie Haven</span></h1>
+                <div class="divider"></div>
+                <p>More than just a restaurant. We are a community celebrating the love of authentic flavors.</p>
+            </div>
+
+            <div class="about-grid">
+                <div class="about-text-content">
+                    <h3>It Started With a Craving.</h3>
+                    <p>
+                        Foodie Haven began in a small home kitchen with a simple mission: to make high-quality, gourmet meals accessible to everyone at the click of a button. We were tired of cold food and long waits.
+                    </p>
+                    
+                    <div class="highlight-box">
+                        "We believe that food is an emotion. It brings people together, heals bad days, and creates memories."
+                    </div>
+
+                    <p>
+                        Today, our kitchen is bustling with master chefs who treat every ingredient with respect. From hand-tossed pizzas to farm-fresh salads, every dish tells a story of passion.
+                    </p>
+
+                    <a href="{{ url_for('food') }}" class="cta-button">Explore Our Menu</a>
+                </div>
+
+                <div class="about-image-group">
+    <img src="{{ url_for('static', filename='images/restaurant.jpg') }}" 
+         alt="Restaurant Ambience" 
+         class="img-back">
+    
+    <img src="{{ url_for('static', filename='images/restaurant2.jpg') }}" 
+         alt="Delicious Food" 
+         class="img-front">
+</div>  
+            </div>
+
+            <div class="values-section">
+                <div class="value-card">
+                    <div class="icon-wrapper">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h4>100% Fresh</h4>
+                    <p>No frozen shortcuts. We source our vegetables and meats
+{% endblock %}

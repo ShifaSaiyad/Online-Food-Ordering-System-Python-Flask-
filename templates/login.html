@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if error %}
+  <!-- This error display is preserved but styled -->
+  <p class="bg-red-100 text-red-800 p-3 rounded-lg border border-red-300 mb-4 mx-auto max-w-sm">{{ error }}</p>
+{% endif %}
+
+<div class="form-container">
+  <h2 class="text-3xl font-bold mb-8 text-center text-gray-800">Welcome Back</h2>
+<form action="/login" method="POST" class="space-y-6">
+    <div>
+        <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username:</label>
+        <input type="text" name="username" id ="username" required
+            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500 transition duration-150">
+    </div>
+    <div>
+        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password:</label>
+        <input type="password" name="password" id = "password" required
+            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500 transition duration-150">
+    </div>
+    <button type="submit" class="primary-btn w-full text-white font-semibold py-3 rounded-lg text-lg">
+        <i data-lucide="log-in" class="inline-block w-5 h-5 mr-1"></i> Login
+    </button>
+    <p class="text-center text-sm text-gray-600 mt-4">
+        Don't have an account? <a href="{{ url_for('register') }}" class="text-red-800 font-semibold hover:underline">Register here</a>.
+    </p>
+  </form>
+</div>
+{% endblock %}

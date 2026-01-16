@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+<h1 class="text-3xl font-bold text-gray-900 mb-8 text-center">My Shopping Cart</h1>
+
+{% if cart and cart|length > 0 %}
+
+<div class="bg-white shadow-xl rounded-lg overflow-hidden">
+    <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+            <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Item
+                </th>
+                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Price
+                </th>
+                <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Quantity
+                </th>
+                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Subtotal
+                </th>
+                <th scope="col" class="relative px-6 py-3">
+                    <span class="sr-only">Remove</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+            {% for food_id, item in cart.items() %}
+            <!-- 🔴 FIX: Removed redundant Jinja subtotal calculation. 
+                 We now rely on the 'subtotal' calculated and stored in item_data by the Python view. -->
+            <tr>
+                <td class="px-6 py-6 whitespace-nowrap text-lg font-bold text-gray-900">
+                    {{ item.name }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 text-right">
+                    ₹{{ item.price | round(2) }}
+                </td>
+                <td class="px-6 py-6 whitespace-nowrap text-lg text-gray-800 text-center font-bold">
+                    <a href="{{ url_for('remove_from_cart', food_id=item.id) }}" class="text-red-500 hover:text-red-700 font-bold px-1">-</a>
+                    {{ item.quantity }}
+                    <a href="{{ url_for('add_to_cart', food_id=item.id) }}" class="text-green-500 hover:text-green-700 font-bold px-1">+</a>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900 text-right">
+                    <!-- 🟢 FIX: Use the subtotal calculated and passed from Python (item.subtotal) -->
+                    ₹{{ item.subtotal | default(0.0) | round(2) }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-lg font-bold">
+                    <a href="{{ url_for('remove_from_cart', food_id=item.id) }}" class="text-red-700 hover:text-red-900 ml-2 text-lg">
+                        Remove
+                    </a>
+                </td>
+            </tr>
+            
+            {% endfor %}
+            
+        </tbody>
+    </table>
+</div>
+
+<div class="mt-8 flex justify-end">
+    <div class="bg-gray-50 p-6 rounded-lg shadow-inner w-full md:w-1/2">
+        <div class="flex justify-between text-xl font-bold text-gray-900 border-t border-gray-300 pt-4 mt-4">
+            <span>Grand Total:</span>
+            <!-- This line is now guaranteed to display the correct grand_total passed from app.py -->
+            <span class="text-red-700">₹{{ grand_total | round(2) }}</span>
+        </div>
+        
+        <div class="mt-6">
+            <a href="{{ url_for('checkout') }}" class="w-full primary-btn bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-md text-center flex items-center justify-center">
+                <i data-lucide="shopping-bag" class="w-5 h-5 mr-2"></i> Proceed to Order (Checkout)
+            </a>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<div class="text-center p-10 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50">
+    <i data-lucide="shopping-cart" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
+    <p class="text-xl text-gray-600 font-medium">Your cart is empty.</p>
+    <p class="text-sm text-gray-500 mt-2">Time to browse our delicious menu!</p>
+    <a href="{{ url_for('food') }}" class="mt-4 inline-block primary-btn">Go to Menu</a>
+</div>
+{% endif %}
+
+
+</main>
+{% endblock %}
