@@ -7,7 +7,7 @@ This repository contains a **beginner-friendly** Flask project that can be acces
 
 
 <pre>
-🛠️ **Technologies Used**
+🛠️ <b>Technologies Used</b>
 
 Backend: Python, Flask
 Frontend: HTML, CSS, Bootstrap
