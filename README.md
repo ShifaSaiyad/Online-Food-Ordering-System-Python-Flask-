@@ -6,38 +6,44 @@ A simple and functional Online Food Ordering System developed using Python Flask
 
 🚀 Features
 
+<pre>
 👤 User Features
 
-Browse available food items,
-Place food orders,
-Download order receipt as PDF,
-Simple and user-friendly interface.
+Browse available food items
+Place food orders
+Download order receipt as PDF
+Simple and user-friendly interface
+</pre>
 
+<pre>
 🔐 Admin Features
 
-Secure admin panel,
-Add, update, and delete food menu items,
-View all customer orders,
-Track monthly orders,
-View registered users.
+Secure admin panel
+Add, update, and delete food menu items
+View all customer orders
+Track monthly orders
+View registered users
+</pre>
 
-
+<pre>
 🛠️ Technologies Used
 
 Backend: Python, Flask
 Frontend: HTML, CSS, Bootstrap
 Database: SQLite
+</pre>
 
-
-<pre>PDF Generation: ReportLab / Flask utilities
+<pre>
+  PDF Generation: ReportLab / Flask utilities
 
 📸 Project Screenshots
 🏠 Home Page
 🛒 Food Menu
 🧾 Order & PDF Receipt
 🛠 Admin Dashboard
-
 </pre>
+
+<pre>
 ⚙️ How to Run the Project
 
 Navigate to the project folder:
@@ -65,14 +71,14 @@ User authentication & login system
 Online payment gateway integration
 Order tracking system
 Improved UI/UX
+</pre>
 
-
-
+<pre>
 👩‍💻 Author
 
 Shifa Saiyad
 IT Student | Python & Flask Learner
-
+</pre>
 
 
 
