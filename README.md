@@ -1,13 +1,13 @@
 
 🍽️ Online Food Ordering System (Python Flask)
 
-Online Food Ordering System is a basic web application developed using **Python Flask** and SQLite as part of my learning journey. The project allows users to browse food items, place orders, and download an order receipt in PDF format. It includes an admin panel to manage the food menu and view customer orders. This project helped me understand Flask fundamentals, database operations, and basic web application workflow.
+**Online Food Ordering System** is a basic web application developed using **Python Flask** and **SQLite** as part of my learning journey. The project allows users to browse food items, place orders, and download an **order receipt in PDF format**. It includes an **admin panel** to manage the food menu and view customer orders. This project helped me understand Flask fundamentals, database operations, and basic web application workflow.
 
-This repository contains a beginner-friendly Flask project that can be accessed, cloned, and executed locally for learning and practice purposes.
+This repository contains a **beginner-friendly** Flask project that can be accessed, cloned, and executed locally for learning and practice purposes.
 
 
 <pre>
-🛠️ Technologies Used
+🛠️ **Technologies Used**
 
 Backend: Python, Flask
 Frontend: HTML, CSS, Bootstrap
@@ -15,7 +15,7 @@ Database: SQLite
 </pre> 
 
 
-🚀 Features
+🚀 **Features**
 
 <pre>
 👤 User Features
